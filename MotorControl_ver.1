@@ -1,0 +1,14 @@
+void setup() {
+  // put your setup code here, to run once:
+  pinMode (9, OUTPUT) ;
+  pinMode (10, OUTPUT) ;
+  TCCR1A = 0xE2 ;  // Set up mode 14, fast PWM with TOP=ICR1
+  TCCR1B = 0x19 ;   // prescale is divide-by-1, so 2000 cycles = 125us
+  ICR1  = 2000-1 ;    // counts from 0..1999 continuously
+  OCR1A = 1000-1 ;  // set PWM outputs at midpoints
+  OCR1B = 1000-1 ;
+  TCNT1 = 200 ;  // counter set to zero
+}
+
+void loop(){
+}
