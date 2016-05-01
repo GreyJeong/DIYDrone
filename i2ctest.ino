@@ -17,6 +17,8 @@ void loop()
 	ACC_getADC();
 	Gyro_getADC();
 	Device_Mag_getADC();
+	double rollangle = getrollangle(imu.accADC[PITCH], imu.accADC[YAW], imu.gyroADC[PITCH]);
+	double pitchangle = getpitchangle(imu.accADC[ROLL], imu.accADC[YAW], imu.gyroADC[ROLL]);
 	
 	Serial.print("Mag:");                         //magnetometer values
 	Serial.print(imu.magADC[ROLL]);
@@ -40,8 +42,14 @@ void loop()
 	Serial.print(imu.gyroADC[PITCH]);
 	Serial.print(',');
 	Serial.print(imu.gyroADC[YAW]);
-	Serial.println(' ');
+	
+        Serial.print(" rollangle: ");
+	Serial.print(rollangle);
 
-	delay(1000);
+	Serial.print(" pitchangle: ");
+	Serial.print(pitchangle);
+
+	Serial.println(' ');
+	/*delay(1000);*/
 
 }
