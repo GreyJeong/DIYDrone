@@ -522,3 +522,18 @@ void initSensors() {
 		if (i2c_errors_count == 0) break; // no error during init => init ok
 	}
 }
+
+double pangle=0, rangle=0;
+
+double getpitchangle(int16_t ac_x,int16_t ac_z, int16_t gy_y){
+	double deg1 = atan2(abs(ac_x), abs(ac_z)) * 180 / PI;
+	/*double dgy_x = gy_y / 131;*/
+	pangle = (0.95*(pangle + (gy_y*0.001))) + (0.05*deg1);
+	return pangle;
+}
+
+double getrollangle(int16_t ac_y, int16_t ac_z, int16_t gy_x){
+	double deg2 = atan2(abs(ac_y), abs(ac_z)) * 180 / PI;
+	rangle = (0.95*(rangle + (gy_x*0.001))) + (0.05*deg2);
+	return rangle;
+}
