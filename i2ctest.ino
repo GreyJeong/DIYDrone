@@ -1,7 +1,5 @@
-#include "Arduino.h"
-#include "i2c.h"
 
-void setup()
+void i2c_initialize()
 {
 	Serial.begin(9600);
 	initS();
@@ -9,7 +7,7 @@ void setup()
 
 }
 
-void loop()
+void i2c_test()
 {
 #define ACC_ORIENTATION(X, Y, Z)  {imu.accADC[ROLL]  = -X; imu.accADC[PITCH]  = -Y; imu.accADC[YAW]  =  Z;}
 #define GYRO_ORIENTATION(X, Y, Z) {imu.gyroADC[ROLL] =  Y; imu.gyroADC[PITCH] = -X; imu.gyroADC[YAW] = -Z;}

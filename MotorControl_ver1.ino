@@ -1,4 +1,4 @@
-void setup() {
+void motor_initialize() {
   // put your setup code here, to run once:
   pinMode (9, OUTPUT) ;
   pinMode (10, OUTPUT) ;
@@ -19,5 +19,7 @@ void setup() {
   OCR2B = 0 ;   // min = 3, max = 255
 }
 
-void loop(){
+void motor_activate(int command)
+{
+      
 }
