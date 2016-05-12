@@ -7,6 +7,16 @@ void bluetooth_initialize() {
   
 }
 
+bool isAvailable()
+{
+    return bluetooth.available();  
+}
+
+char getCommand()
+{
+    return bluetooth.read();  
+}
+
 void bluetooth_activate() {
   // put your main code here, to run repeat
   if(bluetooth.available())

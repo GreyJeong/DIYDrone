@@ -33,7 +33,8 @@ void setup()
  */
 void loop()
 {
-    /*if(bluetooth.available())
+    /* Example Main Logic
+     * if(bluetooth.available())
     {
         int command = bluetooth.read();
 
