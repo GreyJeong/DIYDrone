@@ -2,15 +2,16 @@ int speakerPin = 8;
 
 void speaker_initialize() {
   pinMode(speakerPin, OUTPUT);
-  speaker_activate(GOOD);
+  //speaker_activate(GOOD);
 }
 
 void speaker_activate(char command)
 {
   int sound = 500;
-  int duration = 1000;
+  int duration = 500;
   
-  switch(command){
+  switch(command)
+  {
    
     case GOOD :
       sound = 500;
@@ -28,13 +29,8 @@ void speaker_activate(char command)
       break;
 
     case EXIT : 
-      sound = 2000;
-      for(int i=0; i<4; i++)
-      {
-        tone(speakerPin, sound, duration);
-        sound -= 500;
-        delay(duration * 1.30);
-      }
+      sound = 300;
+      tone(speakerPin, sound, duration);
       break;
  
     case ERROR1 :
