@@ -1,7 +1,6 @@
 
 void i2c_initialize()
 {
-	Serial.begin(9600);
 	initS();
   /* add setup code here */
 
