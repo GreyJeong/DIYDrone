@@ -11,33 +11,33 @@ void motor_initialize(){
   TCCR0A = 0xA3 ;   //Set up mode fast PWM with TOP = OCR0A
   TCCR0B = 0x1A ;
   OCR0A = 249 ;  // set frequency at 8Khz
-  OCR0B = 0 ;   // min = 3, max = 255
+  OCR0B = 249 ;   // min = 3, max = 255
   pinMode (3, OUTPUT) ; // motor 4
   TCCR2A = 0xA3 ;   //Set up mode fast PWM with TOP = OCR0A
   TCCR2B = 0x1A ;
   OCR2A = 249 ;  // set frequency at 8Khz
-  OCR2B = 0 ;   // min = 3, max = 255
+  OCR2B = 249 ;   // min = 3, max = 255
 
   while(1)
   {
     if(millis()>currenttime+1000)
     break;
   }
-  OCR1A=40;
-  OCR1B=40;
+  OCR1A=0;
+  OCR1B=0;
   OCR0B=0;
   OCR2B=0;
 }
 
 void motor_write1( float v)
 {
-    OCR1A=v*1959/255 + 40;
+    OCR1A=v*1999/249;
 }
 
 
 void motor_write2( float v)
 {
-    OCR1B=v*1959/255 + 40;
+    OCR1B=v*1999/249;
 }
 
 
@@ -51,6 +51,19 @@ void motor_write4( float v)
 {
     OCR2B=v;
 }
-
-void loop(){
+void motor_up()
+{
+  OCR0B+=1;
+  OCR2B+=1;
+  OCR1A=OCR2B*1999/249;
+  OCR1B=OCR2B*1999/249;
 }
+
+void motor_down()
+{
+  OCR0B-=1;
+  OCR2B-=1;
+  OCR1A=OCR2B*1999/249;
+  OCR1B=OCR2B*1999/249;
+}
+

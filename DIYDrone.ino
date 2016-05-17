@@ -10,7 +10,7 @@
  #define START 1
  #define EXIT  2
 
-
+char c;
  
 /*
  * setup()
@@ -20,6 +20,7 @@
 void setup()
 {
   bluetooth_initialize();
+  Serial.begin(115200);
   speaker_initialize();
   motor_initialize();
   i2c_initialize();
@@ -33,6 +34,15 @@ void setup()
  */
 void loop()
 {
+  c = Serial.read();
+  
+  if(c == 'u')
+  {
+    motor_up();
+  }else if(c == 'd')
+  {
+    motor_down();
+  }
     /* Example Main Logic
      * if(bluetooth.available())
     {
