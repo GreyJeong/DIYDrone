@@ -40,7 +40,7 @@ void i2c_test()
 	Serial.print(',');
 	Serial.print(imu.gyroADC[YAW]);
 	
-        Serial.print(" rollangle: ");
+  Serial.print(" rollangle: ");
 	Serial.print(rollangle);
 
 	Serial.print(" pitchangle: ");

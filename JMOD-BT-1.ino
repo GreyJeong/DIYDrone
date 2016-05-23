@@ -1,5 +1,5 @@
 
-SoftwareSerial bluetooth(1,0);    // RX : Digital Pin0, TX : Digital Pin1
+SoftwareSerial bluetooth(12,13);    // RX : Digital Pin 12, TX : Digital Pin 13
 
 void bluetooth_initialize() 
 {
@@ -14,6 +14,7 @@ void bluetooth_initialize()
 
 char getCommand()
 {
+  
   if(bluetooth.available()>0)
   {
     return bluetooth.read();  

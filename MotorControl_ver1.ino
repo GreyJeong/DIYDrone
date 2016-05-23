@@ -57,6 +57,7 @@ void motor_up()
   OCR2B+=1;
   OCR1A=OCR2B*1999/249;
   OCR1B=OCR2B*1999/249;
+ 
 }
 
 void motor_down()
@@ -65,5 +66,6 @@ void motor_down()
   OCR2B-=1;
   OCR1A=OCR2B*1999/249;
   OCR1B=OCR2B*1999/249;
+  
 }
 
