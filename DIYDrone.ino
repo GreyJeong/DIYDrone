@@ -45,6 +45,20 @@ void loop()
       case EXIT :
         motor_down();
         break;
+
+        case '3' :
+        motor_up3();
+        break;
+        case '5' :
+        motor_up5();
+        break;
+        case '9' :
+        motor_up9();
+        break;
+        case '0' :
+        motor_up10();
+        break;
+        
     }
     
 }
