@@ -24,7 +24,7 @@ void setup()
   bluetooth_initialize();
   speaker_initialize();
   motor_initialize();
-  Serial.begin(9600);
+  //Serial.begin(9600);
 }
 
 /*
@@ -34,20 +34,17 @@ void setup()
  */
 void loop()
 {
-   char command = getCommand();
+   volatile char command = getCommand();
     
     switch(command)
     {
       case START : 
-       Serial.println("motor_up");
-        speaker_activate(START);
         motor_up();
         break;
         
       case EXIT :
-      Serial.println("motor_down");
-      speaker_activate(EXIT);
         motor_down();
         break;
     }
+    
 }

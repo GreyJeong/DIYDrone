@@ -18,15 +18,12 @@ void motor_initialize(){
   OCR2A = 249 ;  // set frequency at 8Khz
   OCR2B = 249 ;   // min = 3, max = 255
 
-  while(1)
-  {
-    if(millis()>currenttime+10000)
-    break;
-  }
-  OCR1A=0;
-  OCR1B=100;
-  OCR0B=0;
-  OCR2B=0;
+delay(1000);
+
+  OCR1A=10;
+  OCR1B=10;
+  OCR0B=10;
+  OCR2B=10;
 }
 
 void motor_write1( float v)
@@ -53,19 +50,18 @@ void motor_write4( float v)
 }
 void motor_up()
 {
+  OCR1A+=8;
+  OCR1B+=8;
   OCR0B+=1;
   OCR2B+=1;
-  OCR1A=OCR2B*1999/249;
-  OCR1B=OCR2B*1999/249;
- 
+  
 }
 
 void motor_down()
 {
+  OCR1A-=8;
+  OCR1B-=8;
   OCR0B-=1;
   OCR2B-=1;
-  OCR1A=OCR2B*1999/249;
-  OCR1B=OCR2B*1999/249;
-  
 }
 

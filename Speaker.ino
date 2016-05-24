@@ -2,7 +2,7 @@ int speakerPin = 8;
 
 void speaker_initialize() {
   pinMode(speakerPin, OUTPUT);
-  //speaker_activate(GOOD);
+  speaker_activate(GOOD);
 }
 
 void speaker_activate(char command)
