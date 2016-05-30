@@ -43,7 +43,7 @@ void motor2_write( float v)
 }
 
 
-void motor3_write( float v)
+void motor4_write( float v)
 {
   if (v < 5)
   return ;
@@ -51,7 +51,7 @@ void motor3_write( float v)
 }
 
 
-void motor4_write( float v)
+void motor3_write( float v)
 {
   if (v < 5)
   return ;
