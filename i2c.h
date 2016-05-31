@@ -538,16 +538,16 @@ void initSensors() {
 }
 double pangle=0, rangle=0;
 
-double getpitchangle(int16_t ac_x,int16_t ac_z, int16_t gy_y){
+double getpitchangle(int16_t ac_x,int16_t ac_z, int16_t gy_y, int16_t dt){
 	double deg1 = atan2(ac_x, ac_z) * 180 / PI;
 	/*double dgy_x = gy_y / 131;*/
-	pangle = (0.95*(pangle + (gy_y*0.001))) + (0.05*deg1);
+	pangle = (0.95*(pangle + (gy_y*dt))) + (0.05*deg1);
 	return pangle;
 }
 
-double getrollangle(int16_t ac_y, int16_t ac_z, int16_t gy_x){
+double getrollangle(int16_t ac_y, int16_t ac_z, int16_t gy_x, int16_t dt){
 	double deg2 = atan2(ac_y, ac_z) * 180 / PI;
-	rangle = (0.95*(rangle + (gy_x*0.001))) + (0.05*deg2);
+	rangle = (0.95*(rangle + (gy_x*dt))) + (0.05*deg2);
 	return rangle;
 }
 
@@ -734,7 +734,7 @@ void getEstimatedAttitude(){
 	for (axis = 0; axis < 3; axis++) {
 		if ((int16_t)(0.85*ACC_1G*ACC_1G / 256) < (int16_t)(accMag >> 8) && (int16_t)(accMag >> 8) < (int16_t)(1.15*ACC_1G*ACC_1G / 256))
 			EstG.A32[axis] += (int32_t)(imu.accSmooth[axis] - EstG.A16[2 * axis + 1]) << (16 - GYR_CMPF_FACTOR);
-		accZ_tmp += mul(imu.accSmooth[axis], EstG.A16[2 * axis + 1]);
+    	accZ_tmp += mul(imu.accSmooth[axis], EstG.A16[2 * axis + 1]);
 #if MAG
 		EstM.A32[axis] += (int32_t)(imu.magADC[axis] - EstM.A16[2 * axis + 1]) << (16 - GYR_CMPFM_FACTOR);
 #endif
@@ -748,8 +748,8 @@ void getEstimatedAttitude(){
 	// Attitude of the estimated vector
 	int32_t sqGX_sqGZ = mul(EstG.V16.X, EstG.V16.X) + mul(EstG.V16.Z, EstG.V16.Z);
 	invG = InvSqrt(sqGX_sqGZ + mul(EstG.V16.Y, EstG.V16.Y));
-	att.angle[ROLL] = _atan2(EstG.V16.X, EstG.V16.Z);
-	att.angle[PITCH] = _atan2(EstG.V16.Y, InvSqrt(sqGX_sqGZ)*sqGX_sqGZ);
+//	att.angle[ROLL] = _atan2(EstG.V16.X, EstG.V16.Z);
+//	att.angle[PITCH] = _atan2(EstG.V16.Y, InvSqrt(sqGX_sqGZ)*sqGX_sqGZ);
 
 	//note on the second term: mathematically there is a risk of overflow (16*16*16=48 bits). assumed to be null with real values
 	att.heading = _atan2(
