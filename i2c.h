@@ -4,6 +4,7 @@
 #define ACC_1G 265
 #define MAG 1
 #define ACC_VelScale (9.80665f / 10000.0f / ACC_1G)
+static double rpyAngle[3];
 //hello hi good night
 
 static void Device_Mag_getADC();
@@ -108,11 +109,7 @@ void LoadDefaults() {
 	conf.pid[PIDLEVEL].P8 = 30; conf.pid[PIDLEVEL].I8 = 32; conf.pid[PIDLEVEL].D8 = 0;
 	conf.pid[YAW].P8 = 68;  conf.pid[YAW].I8 = 45;  conf.pid[YAW].D8 = 0;
 	conf.pid[PIDALT].P8 = 64; conf.pid[PIDALT].I8 = 25; conf.pid[PIDALT].D8 = 24;
-#if defined (GPS)
-	conf.pid[PIDPOS].P8 = POSHOLD_P * 100;     conf.pid[PIDPOS].I8 = POSHOLD_I * 100;       conf.pid[PIDPOS].D8 = 0;
-	conf.pid[PIDPOSR].P8 = POSHOLD_RATE_P * 10; conf.pid[PIDPOSR].I8 = POSHOLD_RATE_I * 100;  conf.pid[PIDPOSR].D8 = POSHOLD_RATE_D * 1000;
-	conf.pid[PIDNAVR].P8 = NAV_P * 10;          conf.pid[PIDNAVR].I8 = NAV_I * 100;           conf.pid[PIDNAVR].D8 = NAV_D * 1000;
-#endif
+
 	conf.pid[PIDMAG].P8 = 40;
 
 	conf.pid[PIDVEL].P8 = 0;      conf.pid[PIDVEL].I8 = 0;    conf.pid[PIDVEL].D8 = 0;
@@ -1077,7 +1074,7 @@ void getPID(){
 		//-----Get the desired angle rate depending on flight mode
 		if ((f.ANGLE_MODE || f.HORIZON_MODE) && axis < 2) { // MODE relying on ACC
 			// calculate error and limit the angle to 50 degrees max inclination
-			errorAngle = att.angle[axis] + conf.angleTrim[axis]; //16 bits is ok here
+			errorAngle = rpyAngle[axis]*10 + conf.angleTrim[axis]; //16 bits is ok here
 		}
 		if (axis == 2) {//YAW is always gyro-controlled (MAG correction is applied to rcCommand)
 			AngleRateTmp = (((int32_t)(conf.yawRate + 27)) >> 5);
@@ -1140,8 +1137,8 @@ void getPID2() {
 	int16_t deltaSum;
 	int16_t Kp, Ki, Kd;
 
-	for (axis = 0; axis < 3; axis++) {
-		error = att.angle[axis] + conf.angleTrim[axis];
+	for (axis = 0; axis < 2; axis++) {
+		error = rpyAngle[axis] + conf.angleTrim[axis];
 
 		PTerm = Kp * error;
 		ITerm += Ki * error * cycleTime;

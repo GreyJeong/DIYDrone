@@ -1,3 +1,4 @@
+#include <Wire.h>
 #define Baro1
 #include <SoftwareSerial.h>
 #include "Arduino.h"
@@ -47,36 +48,36 @@ void setup()
  */
 void loop()
 {
-  char command = getCommand();
-  int16_t dt;
+	char command = getCommand();
+	int16_t dt;
 
-  currentTime = micros();
-  cycleTime = currentTime - previousTime;
-  previousTime = currentTime;
-  ACC_getADC();
-  Gyro_getADC();
-  Device_Mag_getADC();
-  getEstimatedAttitude();
+	currentTime = micros();
+	cycleTime = currentTime - previousTime;
+	previousTime = currentTime;
+	ACC_getADC();
+	Gyro_getADC();
+	Device_Mag_getADC();
+	getEstimatedAttitude();
 #if defined (Baro1)
-  Baro_update();
-  getEstimatedAltitude();
+	Baro_update();
+	getEstimatedAltitude();
 #endif
-dt=(micros()-currentTime)/1000000;
-//  getPID();
-  double rollangle = getrollangle(imu.accADC[PITCH], imu.accADC[YAW], imu.gyroADC[PITCH],dt);
-  double pitchangle = getpitchangle(imu.accADC[ROLL], imu.accADC[YAW], imu.gyroADC[ROLL],dt);
-  presenttime = micros();  
+	dt = (micros() - currentTime) / 1000000;
+	//  getPID();
+	rpyAngle[ROLL] = getrollangle(imu.accADC[PITCH], imu.accADC[YAW], imu.gyroADC[PITCH], dt);
+	rpyAngle[PITCH] = getpitchangle(imu.accADC[ROLL], imu.accADC[YAW], imu.gyroADC[ROLL],dt);
+	presenttime = micros();  
  
-//  motor1_write(50 - pitch);
+//	motor1_write(50 - pitch);
 //  motor2_write(50 - pitch);
 //  motor3_write(50 + pitch);
 //  motor4_write(30 - pitch);
 //  Serial.println(presenttime - currentTime);
     Serial.print(" rollangle: ");
-    Serial.print(rollangle);
+    Serial.print(rpyAngle[ROLL]);
 
     Serial.print(" pitchangle: ");
-    Serial.print(pitchangle);
+    Serial.print(rpyAngle[PITCH]);
 
     Serial.print("\t heading :");
     Serial.print(att.heading);  
