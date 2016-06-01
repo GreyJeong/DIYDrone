@@ -1088,7 +1088,7 @@ void getPID(){
 		//Used in stand-alone mode for ACRO, controlled by higher level regulators in other modes
 		//-----calculate scaled error.AngleRates
 		//multiplication of rcCommand corresponds to changing the sticks scaling here
-		RateError = AngleRateTmp - imu.gyroData[axis];
+		RateError = AngleRateTmp - imu.gyroADC[axis];
 
 		//-----calculate P component
 		PTerm = ((int32_t)RateError * conf.pid[axis].P8) >> 7;
