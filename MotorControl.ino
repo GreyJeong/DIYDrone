@@ -25,6 +25,15 @@ void motor_initialize(){
   OCR2B=0; //3 pin, min = 4, max = 249
 }
 
+void motor_all_stop()
+{
+  OCR1A=0; //9 pin, min = 40, max = 1999
+  OCR1B=0; //10 pin min = 40, max = 1999
+  OCR0B=0; //5 pin, min = 4, max = 249
+  OCR2B=0; //3 pin, min = 4, max = 249
+  delay(1000);
+}
+
 void motor1_write( float v)
 {
   if (v < 5)
