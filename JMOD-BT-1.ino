@@ -3,7 +3,7 @@ SoftwareSerial bluetooth(12,13);    // RX : Digital Pin 12, TX : Digital Pin 13
 
 void bluetooth_initialize() 
 {
-  bluetooth.begin(115200);
+  bluetooth.begin(9600);
   bluetooth.write("handshake");
 }
 
