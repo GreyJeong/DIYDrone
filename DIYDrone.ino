@@ -31,6 +31,7 @@ int16_t pitch;
 float currenttime = 0;
 float presenttime = 0;
 float dtime = 0;
+int main_switch = 0;
 void setup()
 {
   bluetooth_initialize();
@@ -62,17 +63,43 @@ void loop()
 	Baro_update();
 	getEstimatedAltitude();
 #endif
-	dt = (micros() - currentTime) / 1000000;
-	//  getPID();
+	dt = (micros() - currentTime) / 100000;
+	
 	rpyAngle[ROLL] = getrollangle(imu.accADC[PITCH], imu.accADC[YAW], imu.gyroADC[PITCH], dt);
 	rpyAngle[PITCH] = getpitchangle(imu.accADC[ROLL], imu.accADC[YAW], imu.gyroADC[ROLL],dt);
 	presenttime = micros();  
+  getPID2();
+
+  switch(command) {
+    case START :
+      main_switch = 1;
+      break;
+
+    case EXIT : 
+      main_switch = 2;
+      break;
+    }
+
+ if(main_switch == 1) {
+  float control_value = 10 + axisPID[ROLL] + axisPID[PITCH]; 
+  if(control_value < 100) {
+          motor1_write(control_value);
+          motor2_write(10- axisPID[ROLL]+axisPID[PITCH]);
+          motor3_write(10 - axisPID[ROLL]-axisPID[PITCH]);
+          motor4_write(10+axisPID[ROLL]-axisPID[PITCH]);
+    }
+ }
+ else if(main_switch == 2) {
+    motor_all_stop();
+    main_switch = 0;
+  }
  
-//	motor1_write(50 - pitch);
-//  motor2_write(50 - pitch);
-//  motor3_write(50 + pitch);
-//  motor4_write(30 - pitch);
+  
 //  Serial.println(presenttime - currentTime);
+   /* Serial.print("PID : ");
+    Serial.print(axisPID[ROLL]);
+    Serial.print(" ");
+    Serial.print(axisPID[PITCH]);
     Serial.print(" rollangle: ");
     Serial.print(rpyAngle[ROLL]);
 
@@ -87,31 +114,6 @@ void loop()
     Serial.print(alt.vario);
     Serial.print("\t BaroPID :");
     Serial.print(BaroPID);
-    Serial.println("");
-//  switch(command)
-//  {
-//    
-//  case START : 
-//    motor_up();
-//    break;
-//    
-//  case EXIT :
-//    motor_down();
-//    break;
-//
-//    case '3' :
-//    motor_up3();
-//    break;
-//    case '5' :
-//    motor_up5();
-//    break;
-//    case '9' :
-//    motor_up9();
-//    break;
-//    case '0' :
-//      motor_up10();
-//    break;
-//      
-//  }
+    Serial.println("");*/
   
 }
