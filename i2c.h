@@ -1135,17 +1135,17 @@ void getPID2() {
 	static int16_t delta1[3], delta2[3];
 	int16_t delta;
 	int16_t deltaSum;
-	int16_t Kp, Ki, Kd;
+	int16_t Kp=1.5, Ki=0.58, Kd=0.35;
 
 	for (axis = 0; axis < 2; axis++) {
-		error = rpyAngle[axis] + conf.angleTrim[axis];
-
+		//error = rpyAngle[axis] + conf.angleTrim[axis];
+    error = rpyAngle[axis];
 		PTerm = Kp * error;
 		ITerm += Ki * error * cycleTime;
 		DTerm = Kd * (error - error_previous) / cycleTime;
 
-		axisPID[axis] = PTerm + ITerm + DTerm;
-		axisPID[axis] = constrain(axisPID[axis], -255, 255);
+		axisPID[axis] = (PTerm + ITerm + DTerm)/1;
+		//axisPID[axis] = constrain(axisPID[axis], -30, 30);
 		
 		error_previous = error;
 	}
