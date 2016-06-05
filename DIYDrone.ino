@@ -32,13 +32,17 @@ float currenttime = 0;
 float presenttime = 0;
 float dtime = 0;
 int main_switch = 0;
+int initMotorValue = 10;
+int initMotorSwitch = 0;
+float control_value[4] = { 0, 0, 0, 0 };
+int i;
+
 void setup()
 {
   bluetooth_initialize();
   speaker_initialize();
   motor_initialize();
   initS();
-  LoadDefaults();
   Serial.begin(9600);
 }
 
@@ -63,7 +67,7 @@ void loop()
 	Baro_update();
 	getEstimatedAltitude();
 #endif
-	dt = (micros() - currentTime) / 100000;
+	dt = (micros() - currentTime) / 1000000;
 	
 	rpyAngle[ROLL] = getrollangle(imu.accADC[PITCH], imu.accADC[YAW], imu.gyroADC[PITCH], dt);
 	rpyAngle[PITCH] = getpitchangle(imu.accADC[ROLL], imu.accADC[YAW], imu.gyroADC[ROLL],dt);
@@ -73,6 +77,7 @@ void loop()
   switch(command) {
     case START :
       main_switch = 1;
+	  initMotorSwitch = 1;
       break;
 
     case EXIT : 
@@ -81,13 +86,29 @@ void loop()
     }
 
  if(main_switch == 1) {
-  float control_value = 10 + axisPID[ROLL] + axisPID[PITCH]; 
-  if(control_value < 100) {
-          motor1_write(control_value);
-          motor2_write(10- axisPID[ROLL]+axisPID[PITCH]);
-          motor3_write(10 - axisPID[ROLL]-axisPID[PITCH]);
-          motor4_write(10+axisPID[ROLL]-axisPID[PITCH]);
-    }
+	 if (initMotorSwitch = 1)
+	 {
+		 for (i = 0; i < 4; i++)
+		 {
+			 control_value[i] = initMotorValue;
+		 }
+		 initMotorSwitch = 0;
+	 }
+	 
+		 control_value[0] = control_value[0] + axisPID[ROLL] + axisPID[PITCH];
+		 control_value[1] = control_value[1] - axisPID[ROLL] + axisPID[PITCH];
+		 control_value[2] = control_value[2] - axisPID[ROLL] - axisPID[PITCH];
+		 control_value[3] = control_value[3] + axisPID[ROLL] - axisPID[PITCH];
+
+		 for (i = 0; i < 4; i++)
+		 {
+			 constrain(control_value[i], 10, 100);
+		 }
+
+		  motor1_write(control_value[0]);
+		  motor2_write(control_value[1]);
+		  motor3_write(control_value[2]);
+		  motor4_write(control_value[3]);
  }
  else if(main_switch == 2) {
     motor_all_stop();

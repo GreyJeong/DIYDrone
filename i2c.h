@@ -538,13 +538,13 @@ double pangle=0, rangle=0;
 double getpitchangle(int16_t ac_x,int16_t ac_z, int16_t gy_y, int16_t dt){
 	double deg1 = atan2(ac_x, ac_z) * 180 / PI;
 	/*double dgy_x = gy_y / 131;*/
-	pangle = (0.95*(pangle + (gy_y*dt))) + (0.05*deg1);
+	pangle = (0.95*(pangle + (gy_y*0.07*dt))) + (0.05*deg1);
 	return pangle;
 }
 
 double getrollangle(int16_t ac_y, int16_t ac_z, int16_t gy_x, int16_t dt){
 	double deg2 = atan2(ac_y, ac_z) * 180 / PI;
-	rangle = (0.95*(rangle + (gy_x*dt))) + (0.05*deg2);
+	rangle = (0.95*(rangle + (gy_x*0.07*dt))) + (0.05*deg2);
 	return rangle;
 }
 
@@ -1127,14 +1127,10 @@ void getPID(){
 
 void getPID2() {
 
-	int16_t error, error_previous;
-	int16_t AngleRateTmp, RateError;
-	int16_t PTerm = 0, ITerm = 0, DTerm, PTermACC, ITermACC;
+	int16_t error;
+	int16_t PTerm = 0, ITerm = 0, DTerm;
 	static int32_t errorGyroI[3] = { 0, 0, 0 };
 	static int16_t lastError[3] = { 0, 0, 0 };
-	static int16_t delta1[3], delta2[3];
-	int16_t delta;
-	int16_t deltaSum;
 	int16_t Kp=1.5, Ki=0.58, Kd=0.35;
 
 	for (axis = 0; axis < 2; axis++) {
@@ -1142,11 +1138,11 @@ void getPID2() {
     error = rpyAngle[axis];
 		PTerm = Kp * error;
 		ITerm += Ki * error * cycleTime;
-		DTerm = Kd * (error - error_previous) / cycleTime;
+		DTerm = Kd * (error - lastError[axis]) / cycleTime;
 
 		axisPID[axis] = (PTerm + ITerm + DTerm)/1;
 		//axisPID[axis] = constrain(axisPID[axis], -30, 30);
 		
-		error_previous = error;
+		lastError[axis] = error;
 	}
 }
