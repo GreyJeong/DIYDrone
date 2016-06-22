@@ -1129,8 +1129,13 @@ void getPID2() {
 
 	double error;
 	double PTerm = 0, ITerm = 0, DTerm;
+<<<<<<< HEAD
 	static double errorGyroI[3] = { 0, 0, 0 };
 	static double lastError[3] = { 0.0, 0.0, 0.0 };
+=======
+	static int32_t errorGyroI[3] = { 0, 0, 0 };
+	static int16_t lastError[3] = { 0, 0, 0 };
+>>>>>>> 207ff83469d9146a0145b397142696f4d534a021
 //	int16_t Kp=1.5, Ki=0.58, Kd=0.35;
   extern double Kp, Ki, Kd;
 
