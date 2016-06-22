@@ -34,7 +34,7 @@ uint8_t axis, tilt = 0;
 uint16_t calibratingA = 512;
 uint16_t calibratingG = 512;
 uint16_t calibratingB = 200;
-int16_t axisPID[3];
+double axisPID[3];
 typedef struct {
 	uint8_t currentSet;
 	int16_t accZero[3];
@@ -1127,20 +1127,21 @@ void getPID(){
 
 void getPID2() {
 
-	int16_t error;
-	int16_t PTerm = 0, ITerm = 0, DTerm;
-	static int32_t errorGyroI[3] = { 0, 0, 0 };
-	static int16_t lastError[3] = { 0, 0, 0 };
-	int16_t Kp=1.5, Ki=0.58, Kd=0.35;
+	double error;
+	double PTerm = 0, ITerm = 0, DTerm;
+	static double errorGyroI[3] = { 0, 0, 0 };
+	static double lastError[3] = { 0.0, 0.0, 0.0 };
+//	int16_t Kp=1.5, Ki=0.58, Kd=0.35;
+  extern double Kp, Ki, Kd;
 
 	for (axis = 0; axis < 2; axis++) {
 		//error = rpyAngle[axis] + conf.angleTrim[axis];
     error = rpyAngle[axis];
 		PTerm = Kp * error;
-		ITerm += Ki * error * cycleTime;
-		DTerm = Kd * (error - lastError[axis]) / cycleTime;
+		ITerm += Ki * error * (double)cycleTime / 1000000.0;
+		DTerm = Kd * (error - lastError[axis]) / ((double)cycleTime / 1000000.0);
 
-		axisPID[axis] = (PTerm + ITerm + DTerm)/1;
+		axisPID[axis] = PTerm + ITerm + DTerm;
 		//axisPID[axis] = constrain(axisPID[axis], -30, 30);
 		
 		lastError[axis] = error;

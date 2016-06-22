@@ -1,5 +1,5 @@
 
-SoftwareSerial bluetooth(12,13);    // RX : Digital Pin 12, TX : Digital Pin 13
+//SoftwareSerial bluetooth(12,13);    // RX : Digital Pin 12, TX : Digital Pin 13
 
 void bluetooth_initialize() 
 {

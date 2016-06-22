@@ -34,7 +34,7 @@ void motor_all_stop()
   delay(1000);
 }
 
-void motor1_write( float v)
+void motor1_write( double v)
 {
   if (v < 5)
   return ;
@@ -43,7 +43,7 @@ void motor1_write( float v)
 }
 
 
-void motor2_write( float v)
+void motor2_write( double v)
 {
   if (v < 5)
   return ;
@@ -52,7 +52,7 @@ void motor2_write( float v)
 }
 
 
-void motor4_write( float v)
+void motor4_write( double v)
 {
   if (v < 5)
   return ;
@@ -60,7 +60,7 @@ void motor4_write( float v)
 }
 
 
-void motor3_write( float v)
+void motor3_write( double v)
 {
   if (v < 5)
   return ;

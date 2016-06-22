@@ -5,7 +5,7 @@
 #include "i2c.h"
 #include "string.h"
 
-
+SoftwareSerial bluetooth(12,13);    // RX : Digital Pin 12, TX : Digital Pin 13
 /*
  * Command Define 
  * Bluetooth로 전송된 명령어에 대한 define
@@ -32,15 +32,17 @@ float currenttime = 0;
 float presenttime = 0;
 float dtime = 0;
 int main_switch = 0;
-int initMotorValue = 10;
+int initMotorValue = 70;
 int initMotorSwitch = 0;
-float control_value[4] = { 0, 0, 0, 0 };
+double control_value[4] = { 0, 0, 0, 0 };
 int i;
+double Kp = 0.0, Ki = 0.0, Kd = 0.0;
+int duty;
 
 void setup()
 {
   bluetooth_initialize();
-  speaker_initialize();
+//  speaker_initialize();
   motor_initialize();
   initS();
   Serial.begin(9600);
@@ -83,6 +85,25 @@ void loop()
     case EXIT : 
       main_switch = 2;
       break;
+
+   case '7' :
+    initMotorValue++;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    bluetooth.print("Motor");
+    bluetooth.println(initMotorValue);
+    break;
+    case '8' :
+    initMotorValue--;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    bluetooth.print("Motor");
+    bluetooth.println(initMotorValue);
+    break;
     }
 
  if(main_switch == 1) {
@@ -94,16 +115,60 @@ void loop()
 		 }
 		 initMotorSwitch = 0;
 	 }
-	 
-		 control_value[0] = control_value[0] + axisPID[ROLL] + axisPID[PITCH];
-		 control_value[1] = control_value[1] - axisPID[ROLL] + axisPID[PITCH];
-		 control_value[2] = control_value[2] - axisPID[ROLL] - axisPID[PITCH];
-		 control_value[3] = control_value[3] + axisPID[ROLL] - axisPID[PITCH];
+	 switch(command)
+   {
+    case '1' :
+    Kp += 0.01;
+    bluetooth.println(Kp);
+    break;
+    case '2' :
+    Kp -= 0.01;
+    bluetooth.println(Kp);
+    break;
+    case '3' :
+    Ki += 0.01;
+    bluetooth.println(Ki);
+    break;
+    case '4' :
+    Ki -= 0.01;
+    bluetooth.println(Ki);
+    break;
+    case '5' :
+    Kd += 0.01;
+    bluetooth.println(Kd);
+    break;
+    case '6' :
+    Kd -= 0.01;
+    bluetooth.println(Kd);
+    case '7' :
+    initMotorValue++;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    bluetooth.print("Motor");
+    bluetooth.println(initMotorValue);
+    break;
+    case '8' :
+    initMotorValue--;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    control_value[0] = initMotorValue;
+    bluetooth.print("Motor");
+    bluetooth.println(initMotorValue);
+    break;
+   }
+		 control_value[0] = control_value[0] + axisPID[ROLL];// + axisPID[PITCH];
+		 control_value[1] = control_value[1] - axisPID[ROLL];// + axisPID[PITCH];
+		 control_value[2] = control_value[2] - axisPID[ROLL];// - axisPID[PITCH];
+		 control_value[3] = control_value[3] + axisPID[ROLL];// - axisPID[PITCH];
+//    Serial.println(axisPID[ROLL]);
 
-		 for (i = 0; i < 4; i++)
-		 {
-			 constrain(control_value[i], 10, 100);
-		 }
+//		 for (i = 0; i < 4; i++)
+//		 {
+//			 constrain(control_value[i], 10, 100);
+//		 }
 
 		  motor1_write(control_value[0]);
 		  motor2_write(control_value[1]);
